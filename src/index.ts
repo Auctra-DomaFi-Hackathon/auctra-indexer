@@ -1,4 +1,4 @@
-import { ponder } from "ponder:registry";
+console.log(">>> [LOAD] src/index.ts loaded");
 import "./handlers/auctionHouse";
 import "./handlers/englishAuction";
 import "./handlers/dutchAuction";

@@ -1,11 +1,12 @@
 // @ts-nocheck
 import { ponder } from "ponder:registry";
+import { listing, bid, auctionEvent, auctionStats } from "../../ponder.schema";
 
 ponder.on("DutchAuction:AuctionSold", async ({ event, context }) => {
   const { db } = context;
   
   // Update listing as sold
-  await db.update("listing", {
+  await db.update(listing, {
     id: event.args.listingId.toString(),
     winner: event.args.winner,
     winningBid: event.args.price,
@@ -14,7 +15,7 @@ ponder.on("DutchAuction:AuctionSold", async ({ event, context }) => {
   });
 
   // Create auction event record
-  await db.insert("auctionEvent", {
+  await db.insert(auctionEvent, {
     id: `${event.transaction.hash}-${event.log.logIndex}`,
     listingId: event.args.listingId.toString(),
     eventType: "AuctionSold",
@@ -28,7 +29,7 @@ ponder.on("DutchAuction:AuctionSold", async ({ event, context }) => {
   });
 
   // Record dutch auction sale stats
-  await db.insert("auctionStats", {
+  await db.insert(auctionStats, {
     id: `dutch-${event.transaction.hash}`,
     totalListings: 0n,
     totalBids: 0n,

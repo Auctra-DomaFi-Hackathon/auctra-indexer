@@ -21,7 +21,7 @@ export default createConfig({
       chain: "domaTestnet",
       abi: DomainAuctionHouseAbi,
       address: "0x346d94b66072D8b9d678058073A0fe7eF449f03f",
-      startBlock: 10135135,
+      startBlock: 10148727,
     },
     EnglishAuction: {
       chain: "domaTestnet",

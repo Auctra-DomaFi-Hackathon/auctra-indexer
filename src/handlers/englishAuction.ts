@@ -1,11 +1,12 @@
 // @ts-nocheck
 import { ponder } from "ponder:registry";
+import { listing, bid, auctionEvent, auctionStats } from "../../ponder.schema";
 
 ponder.on("EnglishAuction:BidPlaced", async ({ event, context }) => {
   const { db } = context;
   
   // Create bid record
-  await db.insert("bid", {
+  await db.insert(bid, {
     id: `${event.args.listingId}-${event.args.bidder}-${event.transaction.hash}`,
     listingId: event.args.listingId.toString(),
     bidder: event.args.bidder,
@@ -16,7 +17,7 @@ ponder.on("EnglishAuction:BidPlaced", async ({ event, context }) => {
   });
 
   // Create auction event record
-  await db.insert("auctionEvent", {
+  await db.insert(auctionEvent, {
     id: `${event.transaction.hash}-${event.log.logIndex}`,
     listingId: event.args.listingId.toString(),
     eventType: "BidPlaced",
@@ -30,7 +31,7 @@ ponder.on("EnglishAuction:BidPlaced", async ({ event, context }) => {
   });
 
   // Record english auction bid stats
-  await db.insert("auctionStats", {
+  await db.insert(auctionStats, {
     id: `english-bid-${event.transaction.hash}`,
     totalListings: 0n,
     totalBids: 1n,
@@ -44,14 +45,14 @@ ponder.on("EnglishAuction:AuctionExtended", async ({ event, context }) => {
   const { db } = context;
   
   // Update listing with new end time
-  await db.update("listing", {
+  await db.update(listing, {
     id: event.args.listingId.toString(),
     endTime: event.args.newEndTime,
     updatedAt: event.block.timestamp,
   });
 
   // Create auction event record
-  await db.insert("auctionEvent", {
+  await db.insert(auctionEvent, {
     id: `${event.transaction.hash}-${event.log.logIndex}`,
     listingId: event.args.listingId.toString(),
     eventType: "AuctionExtended",
