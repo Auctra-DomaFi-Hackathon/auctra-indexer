@@ -9,7 +9,7 @@ This guide provides step-by-step instructions to create a Ponder indexer that ca
 - Contract addresses and ABIs available
 
 ## Contract Addresses
-
+### DOMA Testnet
 ```
 DomainNFT: 0x424bDf2E8a6F52Bd2c1C81D9437b0DC0309DF90f
 FeeManager: 0xaCd0B6598768d597Ad6c322f88969E687617Dd28
@@ -26,14 +26,14 @@ Chain ID: 8654
 RPC URL: https://testnet.doma.tech/
 Block Explorer: https://explorer-testnet.doma.tech/
 
-Note: Replace contract addresses below with actual deployed addresses on DOMA testnet
-DomainNFT: [TO_BE_DEPLOYED]
-FeeManager: [TO_BE_DEPLOYED]
-RegistrarBridge: [TO_BE_DEPLOYED]
-EnglishAuction: [TO_BE_DEPLOYED]
-DutchAuction: [TO_BE_DEPLOYED]
-SealedBidAuction: [TO_BE_DEPLOYED]
-DomainAuctionHouse: [TO_BE_DEPLOYED]
+DomainNFT: 0x424bDf2E8a6F52Bd2c1C81D9437b0DC0309DF90f
+FeeManager: 0xaCd0B6598768d597Ad6c322f88969E687617Dd28
+RegistrarBridge: 0x76D2559Dc8C5C092649C2A0dDFb3d6395157CC18
+EnglishAuction: 0x947e70b9362eeCA8a3994F839Ebcc2C1c7d63C5d
+DutchAuction: 0x084DA94314FE36Cf957191A78a7d6395dC951686
+SealedBidAuction: 0x7Cb994c76074064E6003f7DE048c35A285055c5C
+DomainAuctionHouse: 0x346d94b66072D8b9d678058073A0fe7eF449f03f
+
 ```
 
 ## Step 1: Initialize Ponder Project Structure
