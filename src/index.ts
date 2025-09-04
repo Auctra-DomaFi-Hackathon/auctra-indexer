@@ -5,3 +5,5 @@ import "./handlers/dutchAuction";
 import "./handlers/sealedBidAuction";
 import "./handlers/feeManager";
 import "./handlers/registrarBridge";
+import "./handlers/domainLendingPool";
+import "./handlers/domainRentalVault";

@@ -6,6 +6,8 @@ import { DutchAuctionAbi } from "./abis/DutchAuction";
 import { SealedBidAuctionAbi } from "./abis/SealedBidAuction";
 import { FeeManagerAbi } from "./abis/FeeManager";
 import { RegistrarBridgeAbi } from "./abis/RegistrarBridge";
+import { DomainLendingAbi } from "./abis/DomainLending";
+import { DomainRentalVaultAbi } from "./abis/DomainRentalVault";
 
 export default createConfig({
   chains: {
@@ -52,6 +54,18 @@ export default createConfig({
       abi: RegistrarBridgeAbi,
       address: "0x76D2559Dc8C5C092649C2A0dDFb3d6395157CC18",
       startBlock: 10135128,
+    },
+    DomainLendingPool: {
+      chain: "domaTestnet",
+      abi: DomainLendingAbi,
+      address: "0x133272720610d669Fa4C5891Ab62a302455585Dd",
+      startBlock: 10126589,
+    },
+    DomainRentalVault: {
+      chain: "domaTestnet",
+      abi: DomainRentalVaultAbi,
+      address: "0x57Cf6d83589Da81DBB8fD99bcA48B64f52f89eA7",
+      startBlock: 10126591,
     },
   },
 });
