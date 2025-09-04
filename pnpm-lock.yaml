@@ -21,6 +21,9 @@ importers:
         specifier: ^2.21.3
         version: 2.37.1(typescript@5.9.2)
     devDependencies:
+      '@ponder/utils':
+        specifier: ^0.2.12
+        version: 0.2.12(typescript@5.9.2)(viem@2.37.1(typescript@5.9.2))
       '@types/node':
         specifier: ^20.9.0
         version: 20.19.11
@@ -339,6 +342,15 @@ packages:
 
   '@ponder/utils@0.2.11':
     resolution: {integrity: sha512-0wkdMaq2KWMpY7qZv62YPU5oScJ8rIAH7x91pNabSX9Iph3TsEfEAU0NZVxfmb1B8S+ngvzy/PSc7QLHODT0rw==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+      viem: '>=2'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@ponder/utils@0.2.12':
+    resolution: {integrity: sha512-pIlunpEoXXJlqSucidJl4r4s66DOnPRbqPY3lZ02uhBr6e2GYK7iNRg4IW7v4WnIhVoSugnWIRiEQYWA0yNLiw==}
     peerDependencies:
       typescript: '>=5.0.4'
       viem: '>=2'
@@ -2038,6 +2050,12 @@ snapshots:
     optional: true
 
   '@ponder/utils@0.2.11(typescript@5.9.2)(viem@2.37.1(typescript@5.9.2))':
+    dependencies:
+      viem: 2.37.1(typescript@5.9.2)
+    optionalDependencies:
+      typescript: 5.9.2
+
+  '@ponder/utils@0.2.12(typescript@5.9.2)(viem@2.37.1(typescript@5.9.2))':
     dependencies:
       viem: 2.37.1(typescript@5.9.2)
     optionalDependencies:
