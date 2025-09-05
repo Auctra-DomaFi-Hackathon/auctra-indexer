@@ -214,13 +214,51 @@ ponder.on("DomainAuctionHouse:BidPlaced", async ({ event, context }) => {
 });
 
 ponder.on("DomainAuctionHouse:AuctionEnded", async ({ event, context }) => {
-  console.log(`🏁 AuctionEnded - skipped`);
+  const { db } = context;
+  const id = event.args.listingId.toString();
+
+  console.log(`🏁 AuctionEnded for listing ${id}`);
+
+  await db
+    .update(listing, { id })
+    .set({
+      status: "Ended",
+      updatedAt: event.block.timestamp,
+    });
+
+  console.log(`✅ AuctionEnded status updated for ${id}`);
 });
 
 ponder.on("DomainAuctionHouse:Settled", async ({ event, context }) => {
-  console.log(`✅ Settled - skipped`);
+  const { db } = context;
+  const id = event.args.listingId.toString();
+
+  console.log(`✅ Settled for listing ${id}, winner: ${event.args.winner}, finalPrice: ${event.args.finalPrice}`);
+
+  await db
+    .update(listing, { id })
+    .set({
+      status: "Ended",
+      winner: event.args.winner,
+      winningBid: event.args.finalPrice,
+      updatedAt: event.block.timestamp,
+    });
+
+  console.log(`✅ Settled status updated for ${id}`);
 });
 
 ponder.on("DomainAuctionHouse:Cancelled", async ({ event, context }) => {
-  console.log(`❌ Cancelled - skipped`);
+  const { db } = context;
+  const id = event.args.listingId.toString();
+
+  console.log(`❌ Cancelled for listing ${id}`);
+
+  await db
+    .update(listing, { id })
+    .set({
+      status: "Cancelled",
+      updatedAt: event.block.timestamp,
+    });
+
+  console.log(`✅ Cancelled status updated for ${id}`);
 });
