@@ -26,6 +26,8 @@ export const bid = onchainTable("bid", (t) => ({
   listingId: t.text().notNull(),
   bidder: t.hex().notNull(),
   amount: t.bigint().notNull(),
+  nft: t.hex().notNull(),
+  tokenId: t.bigint().notNull(),
   timestamp: t.bigint().notNull(),
   blockNumber: t.bigint().notNull(),
   transactionHash: t.hex().notNull(),

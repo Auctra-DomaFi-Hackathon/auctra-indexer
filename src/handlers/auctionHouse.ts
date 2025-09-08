@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { ponder } from "ponder:registry";
 // import { listing } from "../../ponder.schema";
-import { listing } from "ponder:schema";
-import { eq } from "drizzle-orm";
+import { listing, bid } from "ponder:schema";
+import { eq, desc } from "drizzle-orm";
 // PRODUCTION TESTED PATTERN for Ponder indexing
 // ponder.on("DomainAuctionHouse:Listed", async ({ event, context }) => {
 //   const { db } = context;
@@ -210,7 +210,37 @@ ponder.on("DomainAuctionHouse:AuctionStarted", async ({ event, context }) => {
 });
 
 ponder.on("DomainAuctionHouse:BidPlaced", async ({ event, context }) => {
-  console.log(`💰 BidPlaced - skipped`);
+  const { db } = context;
+  const listingId = event.args.listingId.toString();
+  const bidId = `${event.transaction.hash}-${event.log.logIndex}`;
+  
+  console.log(`💰 BidPlaced for listing ${listingId}, bidder: ${event.args.bidder}, amount: ${event.args.amount}`);
+
+  try {
+    // Get listing info untuk mendapatkan nft dan tokenId
+    const listingData = await db.find(listing, { id: listingId });
+    
+    if (!listingData) {
+      console.error(`❌ Listing ${listingId} not found for bid ${bidId}`);
+      return;
+    }
+
+    await db.insert(bid).values({
+      id: bidId,
+      listingId: listingId,
+      bidder: event.args.bidder,
+      amount: event.args.amount,
+      nft: listingData.nft,
+      tokenId: listingData.tokenId,
+      timestamp: event.block.timestamp,
+      blockNumber: BigInt(event.block.number),
+      transactionHash: event.transaction.hash,
+    });
+
+    console.log(`✅ Bid recorded: ${bidId} for token ${listingData.tokenId}`);
+  } catch (error) {
+    console.error(`❌ Error processing bid ${bidId}:`, error);
+  }
 });
 
 ponder.on("DomainAuctionHouse:AuctionEnded", async ({ event, context }) => {

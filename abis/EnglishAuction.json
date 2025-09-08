@@ -290,7 +290,10 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "bytes", "name": "data", "type": "bytes" }],
+    "inputs": [
+      { "internalType": "uint256", "name": "listingId", "type": "uint256" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
     "name": "onStart",
     "outputs": [],
     "stateMutability": "nonpayable",
