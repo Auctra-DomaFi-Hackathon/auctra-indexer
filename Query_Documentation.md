@@ -10,6 +10,8 @@ This document contains essential GraphQL queries for interacting with the Auctra
 5. [Fee Distribution Queries](#fee-distribution-queries)
 6. [Domain Transfer Queries](#domain-transfer-queries)
 7. [Sealed Bid Queries](#sealed-bid-queries)
+8. [Domain Rental Vault Queries](#domain-rental-vault-queries)
+9. [Domain Lending Pool Queries](#domain-lending-pool-queries)
 
 ---
 
@@ -453,6 +455,693 @@ query GetUnrevealedCommitments($limit: Int = 50) {
     bidder
     commitmentHash
     timestamp
+  }
+}
+```
+
+---
+
+## Domain Rental Vault Queries
+
+### Get All Active Rental Listings
+```graphql
+query GetActiveRentalListings($limit: Int = 20) {
+  rentalListings(
+    limit: $limit
+    where: { active: true, paused: false }
+    orderBy: "createdAt"
+    orderDirection: "desc"
+  ) {
+    id
+    owner
+    nft
+    tokenId
+    paymentToken
+    pricePerDay
+    securityDeposit
+    minDays
+    maxDays
+    paused
+    active
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### Get Rental Listings by Owner
+```graphql
+query GetRentalListingsByOwner($owner: String!, $limit: Int = 10) {
+  rentalListings(
+    limit: $limit
+    where: { owner: $owner }
+    orderBy: "createdAt"
+    orderDirection: "desc"
+  ) {
+    id
+    owner
+    nft
+    tokenId
+    paymentToken
+    pricePerDay
+    securityDeposit
+    minDays
+    maxDays
+    active
+    paused
+    createdAt
+  }
+}
+```
+
+### Get Single Rental Listing Details
+```graphql
+query GetRentalListingDetails($listingId: String!) {
+  rentalListing(id: $listingId) {
+    id
+    owner
+    nft
+    tokenId
+    paymentToken
+    pricePerDay
+    securityDeposit
+    minDays
+    maxDays
+    paused
+    active
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### Get Active Rentals
+```graphql
+query GetActiveRentals($limit: Int = 20) {
+  rentals(
+    limit: $limit
+    where: { active: true }
+    orderBy: "startedAt"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    user
+    owner
+    nft
+    tokenId
+    days
+    totalPaid
+    deposit
+    expires
+    active
+    startedAt
+    endedAt
+  }
+}
+```
+
+### Get User's Active Rentals
+```graphql
+query GetUserActiveRentals($user: String!, $limit: Int = 10) {
+  rentals(
+    limit: $limit
+    where: { user: $user, active: true }
+    orderBy: "startedAt"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    user
+    owner
+    nft
+    tokenId
+    days
+    totalPaid
+    deposit
+    expires
+    startedAt
+  }
+}
+```
+
+### Get User's Rental History
+```graphql
+query GetUserRentalHistory($user: String!, $limit: Int = 20) {
+  rentals(
+    limit: $limit
+    where: { user: $user }
+    orderBy: "startedAt"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    user
+    owner
+    nft
+    tokenId
+    days
+    totalPaid
+    deposit
+    expires
+    active
+    startedAt
+    endedAt
+  }
+}
+```
+
+### Get Owner's Rental Income
+```graphql
+query GetOwnerRentalIncome($owner: String!, $limit: Int = 20) {
+  rentals(
+    limit: $limit
+    where: { owner: $owner }
+    orderBy: "startedAt"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    user
+    nft
+    tokenId
+    days
+    totalPaid
+    deposit
+    startedAt
+    endedAt
+  }
+}
+```
+
+### Get Rental History Events
+```graphql
+query GetRentalHistoryEvents($limit: Int = 50) {
+  rentalHistories(
+    limit: $limit
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    eventType
+    user
+    owner
+    nft
+    tokenId
+    data
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get Rental Events for Listing
+```graphql
+query GetRentalEventsForListing($listingId: String!, $limit: Int = 50) {
+  rentalHistories(
+    limit: $limit
+    where: { listingId: $listingId }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    eventType
+    user
+    owner
+    nft
+    tokenId
+    data
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get User Rental Profile
+```graphql
+query GetUserRentalProfile($userAddress: String!) {
+  userRentalProfile(id: $userAddress) {
+    id
+    totalRentals
+    totalSpent
+    totalDeposits
+    activeRentals
+    expiredRentals
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### Get Owner Rental Profile
+```graphql
+query GetOwnerRentalProfile($ownerAddress: String!) {
+  ownerRentalProfile(id: $ownerAddress) {
+    id
+    totalListings
+    totalRentals
+    totalEarned
+    activeListings
+    createdAt
+    updatedAt
+  }
+}
+```
+
+### Get Deposit Records
+```graphql
+query GetDepositRecords($limit: Int = 20) {
+  depositRecords(
+    limit: $limit
+    orderBy: "lockedAt"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    user
+    amount
+    paymentToken
+    locked
+    claimed
+    lockedAt
+    claimedAt
+    claimedBy
+  }
+}
+```
+
+### Get User's Deposit Records
+```graphql
+query GetUserDepositRecords($user: String!, $limit: Int = 10) {
+  depositRecords(
+    limit: $limit
+    where: { user: $user }
+    orderBy: "lockedAt"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    user
+    amount
+    paymentToken
+    locked
+    claimed
+    lockedAt
+    claimedAt
+    claimedBy
+  }
+}
+```
+
+### Get Pending Deposits
+```graphql
+query GetPendingDeposits($limit: Int = 20) {
+  depositRecords(
+    limit: $limit
+    where: { locked: true, claimed: false }
+    orderBy: "lockedAt"
+    orderDirection: "desc"
+  ) {
+    id
+    listingId
+    user
+    amount
+    paymentToken
+    lockedAt
+  }
+}
+```
+
+---
+
+## Domain Lending Pool Queries
+
+### Get All Liquidity Providers
+```graphql
+query GetLiquidityProviders($limit: Int = 20) {
+  liquidityProviders(
+    limit: $limit
+    orderBy: "currentAssetValue"
+    orderDirection: "desc"
+  ) {
+    id
+    lpAddress
+    poolAddress
+    totalDeposited
+    totalWithdrawn
+    currentShares
+    currentAssetValue
+    firstDepositAt
+    lastActionAt
+  }
+}
+```
+
+### Get Liquidity Provider Details
+```graphql
+query GetLiquidityProviderDetails($lpAddress: String!, $poolAddress: String!) {
+  liquidityProvider(id: "${lpAddress}-${poolAddress}") {
+    id
+    lpAddress
+    poolAddress
+    totalDeposited
+    totalWithdrawn
+    currentShares
+    currentAssetValue
+    firstDepositAt
+    lastActionAt
+  }
+}
+```
+
+### Get Supply Transactions
+```graphql
+query GetSupplyTransactions($limit: Int = 50) {
+  supplyTransactions(
+    limit: $limit
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    lpAddress
+    poolAddress
+    type
+    amount
+    shares
+    exchangeRate
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get User's Supply History
+```graphql
+query GetUserSupplyHistory($lpAddress: String!, $limit: Int = 20) {
+  supplyTransactions(
+    limit: $limit
+    where: { lpAddress: $lpAddress }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    lpAddress
+    poolAddress
+    type
+    amount
+    shares
+    exchangeRate
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get All Borrowers
+```graphql
+query GetBorrowers($limit: Int = 20) {
+  borrowers(
+    limit: $limit
+    orderBy: "currentDebt"
+    orderDirection: "desc"
+  ) {
+    id
+    borrowerAddress
+    poolAddress
+    totalBorrowed
+    totalRepaid
+    currentDebt
+    currentHealthFactor
+    hasActiveCollateral
+    collateralNft
+    collateralTokenId
+    collateralValue
+    firstBorrowAt
+    lastActionAt
+    liquidationCount
+  }
+}
+```
+
+### Get Borrower Details
+```graphql
+query GetBorrowerDetails($borrowerAddress: String!, $poolAddress: String!) {
+  borrower(id: "${borrowerAddress}-${poolAddress}") {
+    id
+    borrowerAddress
+    poolAddress
+    totalBorrowed
+    totalRepaid
+    currentDebt
+    currentHealthFactor
+    hasActiveCollateral
+    collateralNft
+    collateralTokenId
+    collateralValue
+    firstBorrowAt
+    lastActionAt
+    liquidationCount
+  }
+}
+```
+
+### Get Borrowers at Risk (Low Health Factor)
+```graphql
+query GetBorrowersAtRisk($healthThreshold: String = "1200000000000000000", $limit: Int = 20) {
+  borrowers(
+    limit: $limit
+    where: { 
+      currentHealthFactor: { lt: $healthThreshold },
+      currentDebt: { gt: "0" }
+    }
+    orderBy: "currentHealthFactor"
+    orderDirection: "asc"
+  ) {
+    id
+    borrowerAddress
+    poolAddress
+    currentDebt
+    currentHealthFactor
+    hasActiveCollateral
+    collateralNft
+    collateralTokenId
+    collateralValue
+    lastActionAt
+  }
+}
+```
+
+### Get Borrow Transactions
+```graphql
+query GetBorrowTransactions($limit: Int = 50) {
+  borrowTransactions(
+    limit: $limit
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    borrowerAddress
+    poolAddress
+    type
+    amount
+    newTotalDebt
+    healthFactor
+    apr
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get User's Borrow History
+```graphql
+query GetUserBorrowHistory($borrowerAddress: String!, $limit: Int = 20) {
+  borrowTransactions(
+    limit: $limit
+    where: { borrowerAddress: $borrowerAddress }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    borrowerAddress
+    poolAddress
+    type
+    amount
+    newTotalDebt
+    healthFactor
+    apr
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get Collateral Transactions
+```graphql
+query GetCollateralTransactions($limit: Int = 50) {
+  collateralTransactions(
+    limit: $limit
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    borrowerAddress
+    poolAddress
+    type
+    nft
+    tokenId
+    valueUsd6
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get User's Collateral History
+```graphql
+query GetUserCollateralHistory($borrowerAddress: String!, $limit: Int = 20) {
+  collateralTransactions(
+    limit: $limit
+    where: { borrowerAddress: $borrowerAddress }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    borrowerAddress
+    poolAddress
+    type
+    nft
+    tokenId
+    valueUsd6
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get Liquidation Events
+```graphql
+query GetLiquidationEvents($limit: Int = 20) {
+  liquidationEvents(
+    limit: $limit
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    borrowerAddress
+    liquidatorAddress
+    poolAddress
+    nft
+    tokenId
+    repayAmount
+    collateralValue
+    profit
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get Liquidations by Liquidator
+```graphql
+query GetLiquidationsByLiquidator($liquidatorAddress: String!, $limit: Int = 20) {
+  liquidationEvents(
+    limit: $limit
+    where: { liquidatorAddress: $liquidatorAddress }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    borrowerAddress
+    liquidatorAddress
+    poolAddress
+    nft
+    tokenId
+    repayAmount
+    collateralValue
+    profit
+    timestamp
+    blockNumber
+    transactionHash
+  }
+}
+```
+
+### Get Pool Metrics
+```graphql
+query GetPoolMetrics($limit: Int = 10) {
+  poolMetrics(
+    limit: $limit
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    poolAddress
+    totalAssets
+    totalShares
+    totalDebt
+    exchangeRate
+    utilization
+    currentAPR
+    totalLiquidityProviders
+    totalBorrowers
+    timestamp
+    blockNumber
+  }
+}
+```
+
+### Get Latest Pool Metrics
+```graphql
+query GetLatestPoolMetrics($poolAddress: String!) {
+  poolMetrics(
+    limit: 1
+    where: { poolAddress: $poolAddress }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    poolAddress
+    totalAssets
+    totalShares
+    totalDebt
+    exchangeRate
+    utilization
+    currentAPR
+    totalLiquidityProviders
+    totalBorrowers
+    timestamp
+    blockNumber
+  }
+}
+```
+
+### Get Interest Rate History
+```graphql
+query GetInterestRateHistory($poolAddress: String!, $limit: Int = 50) {
+  interestRateSnapshots(
+    limit: $limit
+    where: { poolAddress: $poolAddress }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+  ) {
+    id
+    poolAddress
+    apr
+    utilization
+    timestamp
+    blockNumber
   }
 }
 ```

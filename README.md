@@ -14,17 +14,16 @@ A comprehensive blockchain indexer for the Auctra domain auction system, built w
 4. [Installation](#installation)
 5. [Configuration](#configuration)
 6. [Usage](#usage)
-7. [API Endpoints](#api-endpoints)
-8. [GraphQL Queries](#graphql-queries)
-9. [Database Schema](#database-schema)
-10. [Smart Contracts](#smart-contracts)
-11. [Development](#development)
-12. [Deployment](#deployment)
-13. [Troubleshooting](#troubleshooting)
+7. [GraphQL API](#graphql-api)
+8. [Database Schema](#database-schema)
+9. [Smart Contracts](#smart-contracts)
+10. [Development](#development)
+11. [Deployment](#deployment)
+12. [Troubleshooting](#troubleshooting)
 
 ## Overview
 
-The Auctra Indexer is a real-time blockchain data indexer specifically designed for the Auctra domain auction marketplace. It monitors and processes events from multiple smart contracts on the Doma testnet, providing structured data access through both REST APIs and GraphQL endpoints.
+The Auctra Indexer is a real-time blockchain data indexer specifically designed for the Auctra domain auction marketplace. It monitors and processes events from multiple smart contracts on the Doma testnet, providing structured data access through a comprehensive GraphQL API.
 
 ### What it does:
 
@@ -49,8 +48,8 @@ The Auctra Indexer is a real-time blockchain data indexer specifically designed 
 
 ### 🔍 Data Access
 - **GraphQL API**: Flexible query interface with pagination and filtering
-- **REST Endpoints**: Direct API access for specific data queries
 - **Real-time Updates**: Live data streaming through subscriptions
+- **Type-safe Queries**: Fully typed GraphQL schema with auto-completion
 
 ### 📊 Analytics & Metrics
 - Auction statistics and volume tracking
@@ -69,9 +68,9 @@ The Auctra Indexer is a real-time blockchain data indexer specifically designed 
                               │
                               ▼
                        ┌──────────────────┐
-                       │   API Layer      │
-                       │   - GraphQL      │
-                       │   - REST APIs    │
+                       │   GraphQL API    │
+                       │   - Queries      │
+                       │   - Subscriptions│
                        └──────────────────┘
 ```
 
@@ -104,9 +103,8 @@ pnpm dev
 npm run dev
 ```
 
-The indexer will start syncing data and be available at:
+The indexer will start syncing data and the GraphQL API will be available at:
 - GraphQL Playground: `http://localhost:42069/graphql`
-- API endpoints: `http://localhost:42069/`
 
 ## Configuration
 
@@ -176,54 +174,9 @@ pnpm db status
 pnpm db backup
 ```
 
-## API Endpoints
-
-### REST API Endpoints
-
-#### User Bid History
-```http
-GET /user-bid-history/{userAddress}
-```
-
-Returns all bids made by a specific user.
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "bid_123",
-      "listingId": "listing_456",
-      "bidder": "0x742d35Cc...",
-      "amount": "1000000",
-      "timestamp": "1699123456",
-      "blockNumber": "10431250"
-    }
-  ],
-  "count": 25
-}
-```
-
-#### Highest Bid for Listing
-```http
-GET /highest-bid/{listingId}
-```
-
-Returns the highest bid for a specific auction listing.
-
-#### Listing Bids
-```http
-GET /listing-bids/{listingId}
-```
-
-Returns all bids for a specific listing, ordered by amount.
-
-### GraphQL Endpoint
+## GraphQL API
 
 Access the GraphQL playground at `http://localhost:42069/graphql`
-
-## GraphQL Queries
 
 The indexer provides a comprehensive GraphQL API. See [Query_Documentation.md](./Query_Documentation.md) for detailed examples of all available queries.
 
